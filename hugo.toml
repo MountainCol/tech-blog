@@ -12,7 +12,7 @@ theme = "LoveIt"
   pagerSize = 12
 
 [languages]
-  [languages.en]
+  [languages.en.params]
     weight = 1
     # language code
     languageCode = "en"
