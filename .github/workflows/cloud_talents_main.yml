@@ -39,12 +39,12 @@ jobs:
           publish_dir: ./public
 
       - name: Deploy to S3 using AWS CLI
-        run: aws s3 syncpublic/ s3://${{ secrets.arn:aws:iam::010438472413:role/GitHubActions}} --delete
+        run: aws s3 syncpublic/ s3://${{ secrets.GITHUB_TOKEN}} --delete
 
       - name: Clear CloudFront cache invalidation
         run: |
           set -e
-            --distribution-id ${{ secrets.arn:aws:iam::010438472413:role/GitHubActions }} \
+            --distribution-id ${{ secrets.GITHUB_TOKEN }} \
             --paths "/*"
 
           
