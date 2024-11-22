@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: Build a Blog Website 
 
 on:
   push:
@@ -6,16 +6,15 @@ on:
       - main  # Set a branch to deploy
   pull_request:
 
+permissions:
+  id-token: write
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-22.04
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-    
-    permissions:
-      id-token: write
-      contents: read
-  
+      group: ${{ github.workflow }}-${{ github.ref }}  
+      
     steps:
       - uses: actions/checkout@v4
         with:
