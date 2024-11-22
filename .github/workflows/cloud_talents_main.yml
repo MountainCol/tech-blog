@@ -36,4 +36,16 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public      
+          publish_dir: ./public
+
+      - name: Deploy to S3 using AWS CLI
+        run: aws s3 syncpublic/ s3://${{ secrets.GitHub_Tech_blog}} --delete
+
+      - name: Clear CloudFront cache invalidation
+        run: |
+          set -e
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_CF_DIST_ID }} \
+            --paths "/*"
+
+          
