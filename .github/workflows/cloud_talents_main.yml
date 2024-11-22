@@ -38,12 +38,12 @@ jobs:
           publish_dir: ./public
 
       - name: Deploy to S3 using AWS CLI
-        run: aws s3 sync ./public/ s3://${{ secrets.GITHUB_TOKEN }} --delete
+        run: aws s3 sync ./public/ s3://${{ secrets.IAM_ROLE_TECH_BLOG }} --delete
 
       - name: Clear CloudFront cache invalidation
         run: |
           set -e
-            --distribution-id ${{ secrets.GITHUB_TOKEN }} \
+            --distribution-id ${{ secrets.IAM_ROLE_TECH_BLOG }} \
             --paths "/*"
 
           
