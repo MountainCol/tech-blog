@@ -48,8 +48,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.IAM_ROLE_TECH_BLOG }}
-          aws-region: us-east-1
-
+          aws-region: eu-west-1
+          audience: sts.amazonaws.com
+          
       - name: Deploy to S3 using AWS CLI
         run: aws s3 sync ./public/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
