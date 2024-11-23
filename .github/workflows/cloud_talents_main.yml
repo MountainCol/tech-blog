@@ -3,12 +3,16 @@ name: Build a Blog Website
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - main
   pull_request:
 
+# Add these permissions
 permissions:
+  contents: write
+  pages: write
   id-token: write
-  contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   deploy:
@@ -19,8 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          submodules: true
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -37,12 +41,14 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-
+          commit_message: ${{ github.event.head_commit.message }}
+          full_commit_message: ${{ github.event.head_commit.message }}
+          
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.IAM_ROLE_TECH_BLOG }}
-          aws-region: eu-west-1  # Change this to your region
+          aws-region: us-east-1
 
       - name: Deploy to S3 using AWS CLI
         run: aws s3 sync ./public/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
@@ -52,5 +58,3 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
-
-          
