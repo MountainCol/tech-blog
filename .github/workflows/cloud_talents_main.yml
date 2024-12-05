@@ -80,6 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
+      url: ${{ https://mountaincol.github.io/tech-blog/ }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
