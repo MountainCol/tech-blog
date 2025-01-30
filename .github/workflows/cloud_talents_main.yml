@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
 
 permissions:
   contents: read
@@ -13,44 +12,19 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}  
       
     steps:
       - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
         with:
-          submodules: true
-          fetch-depth: 0
+          terraform_version: "1.1.7"
+          cli_config_credentials_token: ${{ secrets.TFC_TOKEN }}      
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: 'latest'
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
-      - name: Create .nojekyll file
-        run: touch public/.nojekyll
-
-     
-          
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.IAM_ROLE_TECH_BLOG }}
-          aws-region: eu-west-1
-          audience: sts.amazonaws.com
-
-      - name: Deploy to S3 using AWS CLI
-        run: aws s3 sync ./public/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
-
-      - name: Clear CloudFront cache invalidation
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+      - name: initialize
+        run: terraform init
+         
+      - name: apply
+        run: terraform apply -auto-approve
 
           
 
