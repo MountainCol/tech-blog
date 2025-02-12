@@ -20,4 +20,6 @@ provider "aws" {
 
 resource "aws_s3_bucket" "tech-blog" {
     bucket = "tech-blog-colin-best-devops"
+
+
  }
