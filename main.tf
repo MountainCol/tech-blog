@@ -1,6 +1,6 @@
 terraform {
   backend "remote" {
-    hostname = "app.terraform.io"
+    hostname     = "app.terraform.io"
     organization = "learn-terraform-aws-v2"
     workspaces {
       name = "Week-2"
@@ -15,11 +15,11 @@ provider "aws" {
 
 provider "aws" {
   region = "us-east-1"
-  alias = "n-virginia"
+  alias  = "n-virginia"
 }
 
 resource "aws_s3_bucket" "tech-blog" {
-    bucket = "tech-blog-colin-best-devops"
+  bucket = "tech-blog-colin-best-devops"
 
 
- }
+}

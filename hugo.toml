@@ -197,7 +197,7 @@ theme = "LoveIt"
       # Gravatar Email for preferred avatar in home page
       gravatarEmail = ""
       # URL of avatar shown in home page (LINK_TO_YOUR_PHOTO_BELOW)
-      avatarURL = "https://share.icloud.com/photos/01fqt14FeJlXk9OZ7nnWAGU9A"
+      avatarURL = "https://cloudtalent-blog-bucket1234.s3.eu-west-1.amazonaws.com/photos-Col/IMG_0685.jpeg"
       #  title shown in home page (HTML format is supported)
       title = "Colin Henderson Cloud Essentials"
       # subtitle shown in home page
