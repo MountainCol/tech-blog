@@ -62,8 +62,8 @@ resource "aws_route_53_zone" "zone" {
 }
 
 resource "aws_acm_certificate" "cert" {
-  #domain_name       = "colinh.cloudtalents.io"
-  #validation_method = "DNS"
+  domain_name       = "colinh.cloudtalents.io"
+  validation_method = "DNS"
 
   tags = {
     Environment = "test"
