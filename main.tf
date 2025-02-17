@@ -43,7 +43,7 @@ resource "aws_s3_bucket" "tech-blog" {
 ## Route 53 and Certificate Manager ##
 ######################################
 
-resource "aws_route_53zone" "zone" {
+resource "aws_route53_zone" "zone" {
   name = var.domain_name
 }
 
