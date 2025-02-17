@@ -33,7 +33,63 @@ variable "domain_name" {
 ###############################
 
 # Bucket Config
+# Get the existing S3 bucket
+data "aws_s3_bucket" "existing_bucket" {
+  bucket = "cloudtalent-blog-bucket1234"
+}
 
+# Get the CloudFront distribution
+data "aws_cloudfront_distribution" "cdn" {
+  id = "E2C7O8WN0508EP"
+}
+
+# Create the bucket policy
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = data.aws_s3_bucket.existing_bucket.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "CloudFrontOACAccess"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "${data.aws_s3_bucket.existing_bucket.arn}/*",
+          data.aws_s3_bucket.existing_bucket.arn
+        ]
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = data.aws_cloudfront_distribution.cdn.arn
+          }
+        }
+      },
+      {
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${data.aws_s3_bucket.existing_bucket.arn}/*"
+      }
+    ]
+  })
+}
+
+# Optional: Make sure the bucket allows public access
+resource "aws_s3_bucket_public_access_block" "public_access" {
+  bucket = data.aws_s3_bucket.existing_bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
 
 ######################################
 ## Route 53 and Certificate Manager ##
