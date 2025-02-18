@@ -35,7 +35,7 @@ variable "domain_name" {
 # Bucket Config
 # Get the existing S3 bucket
 data "aws_s3_bucket" "existing_bucket" {
-  bucket = "cloudtalent-blog-bucket1234/tech-blog"
+  bucket = "cloudtalent-blog-bucket1234/tech_blog(3)"
 }
 
 # Get the CloudFront distribution
