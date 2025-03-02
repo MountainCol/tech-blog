@@ -35,7 +35,7 @@ variable "domain_name" {
 # Bucket Config
 # Get the existing S3 bucket
 data "aws_s3_bucket" "existing_bucket" {
-  bucket = "cloudtalent-blog-bucket1234/tech_blog(3)"
+  bucket = "cloudtalent-blog-bucket1234"
 }
 
 # Get the CloudFront distribution
@@ -46,19 +46,17 @@ data "aws_cloudfront_distribution" "cdn" {
 # Create the bucket policy
 resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = data.aws_s3_bucket.existing_bucket.id
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "CloudFrontOACAccess"
         Effect    = "Allow"
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
         Action = [
           "s3:GetObject",
-          "s3:PutObject",
-          "s3:ListBucket"
         ]
         Resource = [
           "${data.aws_s3_bucket.existing_bucket.arn}/*",
