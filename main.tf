@@ -2,6 +2,7 @@ terraform {
   backend "remote" {
     hostname = "app.terraform.io"
     organization = "learn-terraform-aws-v2"
+    
     workspaces {
       name = "Week-2"
     } 
@@ -25,7 +26,7 @@ provider "aws" {
 variable "domain_name" {
   description = "Domain name for the blog"
   type        = string
-  default     = "colinh.cloudtalents.io"
+  default     = "http://cloudtalent-blog-bucket1234.s3-website-eu-west-1.amazonaws.com"
 }
 
 ###############################
@@ -33,7 +34,7 @@ variable "domain_name" {
 ###############################
 
 # Bucket Config
-# Get the existing S3 bucket
+# Get the existing S3 bucketgit commit -m ""
 data "aws_s3_bucket" "existing_bucket" {
   bucket = "cloudtalent-blog-bucket1234"
 }
