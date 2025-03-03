@@ -27,8 +27,8 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: ${{ secrets.ROLE}}
 
-      - name: initialize
-        run: terraform init
+      - name: init with token
+        run: terraform init -backend-config="token=${{ secrets.TFC_TOKEN }}"
          
       - name: apply
         run: terraform apply -auto-approve

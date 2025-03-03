@@ -1,6 +1,7 @@
 terraform {
   backend "remote" {
-    hostname = "app.terraform.io"
+    hostname     = "app.terraform.io"
+    token        = "token_placeholder"
     organization = "learn-terraform-aws-v2"
     
     workspaces {
@@ -16,7 +17,7 @@ provider "aws" {
 
 provider "aws" {
   region = "us-east-1"
-  alias = "n-virginia"
+  alias  = "n-virginia"
 }
 
 ###############
@@ -52,7 +53,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
@@ -65,7 +66,8 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
         ]
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = data.aws_cloudfront_distribution.s3_distribution.cdn.arn
+            "AWS:SourceArn" = data.aws_cloudfront_distribution.cdn.arn
+            
           }
         }
       },
