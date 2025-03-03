@@ -34,7 +34,7 @@ variable "domain_name" {
 ###############################
 
 # Bucket Config
-# Get the existing S3 bucketgit commit -m ""
+# Get the existing S3 bucket
 data "aws_s3_bucket" "existing_bucket" {
   bucket = "cloudtalent-blog-bucket1234"
 }
@@ -65,7 +65,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
         ]
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = data.aws_cloudfront_distribution.cdn.arn
+            "AWS:SourceArn" = data.aws_cloudfront_distribution.s3_distribution.cdn.arn
           }
         }
       },
