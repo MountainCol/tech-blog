@@ -33,15 +33,17 @@ jobs:
       - name: apply
         run: terraform apply -auto-approve
 
-deploy-hugo:
-  runs-on: ubuntu-22.04
-  needs: create-infra
-  env:
-    CF_DISTRIBUTION: ${{ needs.create-infra.outputs.cf_distribution }}
-    S3_BUCKET: ${{ needs.create-infra.outposts.s3_name }}
-  
+  deploy-hugo:
+    runs-on: ubuntu-22.04
+    needs: build  # Changed from create-infra to build
+    env:
+      # Note: These environment variables need to be set correctly
+      S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}  # Use a secret instead of output
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID }}  # Use a secret instead of output
+    
     concurrency: 
-      group: ${{ github.workflow }}-${{ gitgub.ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}  # Fixed typo in github
+    
     steps:
       - uses: actions/checkout@v4
         with:
