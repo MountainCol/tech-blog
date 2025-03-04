@@ -78,7 +78,7 @@ jobs:
       
       - name: Create CF Invalidation
         env:
-          CF_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID }}
+          CF_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
         run: |
           if [ -z "$CF_DISTRIBUTION_ID" ]; then
             echo "Error: CloudFront Distribution ID is not set"
@@ -87,4 +87,3 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "$CF_DISTRIBUTION_ID" \
             --paths "/*"
-            
