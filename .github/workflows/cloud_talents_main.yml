@@ -32,10 +32,4 @@ jobs:
          
       - name: apply
         run: terraform apply -auto-approve
-
-      - name: Get Terraform Outputs
-        id: terraform_outputs
-        run:
-          echo "cfd=$(terraform output CF_Distribution | tr -d '""')" >>"$GITHUB_OUTPUT"
-          echo "s3name=$(terraform output S£_Name | tr -d '""')" >> "$GITHUB_OUTPUT"
-         
+        
