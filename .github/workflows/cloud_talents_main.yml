@@ -77,7 +77,13 @@ jobs:
           aws s3 sync ./public/ s3://${{ env.S3_BUCKET_NAME }}
       
       - name: Create CF Invalidation
+        env:
+          CF_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID }}
         run: |
+          if [ -z "$CF_DISTRIBUTION_ID" ]; then
+            echo "Error: CloudFront Distribution ID is not set"
+            exit 1
+          fi
           aws cloudfront create-invalidation \
-          --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
-          --paths "/*"
+            --distribution-id "$CF_DISTRIBUTION_ID" \
+            --paths "/*"
