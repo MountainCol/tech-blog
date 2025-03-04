@@ -32,4 +32,50 @@ jobs:
          
       - name: apply
         run: terraform apply -auto-approve
-        
+
+deploy-hugo:
+  runs-on: ubuntu-22.04
+  needs: create-infra
+  env:
+    CF_DISTRIBUTION: ${{ needs.create-infra.outputs.cf_distribution }}
+    S3_BUCKET: ${{ needs.create-infra.outposts.s3_name }}
+  
+    concurrency: 
+      group: ${{ github.workflow }}-${{ gitgub.ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.135.0'
+          extended: true
+      
+      - name: Build
+        run: hugo --minify
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tech-blog
+          path: public/**
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          role-to-assume: ${{ secrets.ROLE}}
+          aws-region: ${{ secrets.REGION}}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./public/ s3://${{ env.S3_BUCKET_NAME }}
+      
+      - name: Create CF Invalidation
+        run: |
+          aws cloudfront create-invalidation \
+          --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+          --paths "/*"
