@@ -38,6 +38,7 @@ jobs:
         run:
           echo "cfd=$(terraform output CF_Distribution | tr -d '""')" >>"$GITHUB_OUTPUT"
           echo "s3name=$(terraform output S£_Name | tr -d '""')" >> "$GITHUB_OUTPUT"
+          
 deploy-hugo:
   runs-on: ubuntu-22.04
   needs: create-infra
