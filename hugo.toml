@@ -4,7 +4,7 @@ baseURL = "https://yourdomain.com"
 defaultContentLanguage = "en"
 # language code
 languageCode = "en"
-title = "Colin Henderson Cloud Essentials"
+title = "Colin Henderson in the Cloud"
 
 # Change the default theme to be use when building the site with Hugo
 theme = "LoveIt"

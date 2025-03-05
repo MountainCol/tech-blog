@@ -27,7 +27,7 @@ provider "aws" {
 variable "domain_name" {
   description = "Domain name for the blog"
   type        = string
-  default     = "http://cloudtalent-blog-bucket1234.s3-website-eu-west-1.amazonaws.com"
+  default     = "colinh.cloudtalents.io"
 }
 
 ###############################
@@ -37,7 +37,7 @@ variable "domain_name" {
 # Bucket Config
 # Get the existing S3 bucket
 data "aws_s3_bucket" "existing_bucket" {
-  bucket = "cloudtalent-blog-bucket1234"
+  bucket = "CT-blog-bucket1234"
 }
 
 # Get the CloudFront distribution
@@ -67,7 +67,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = data.aws_cloudfront_distribution.cdn.arn
-            
+
           }
         }
       },
