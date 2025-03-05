@@ -42,7 +42,7 @@ data "aws_s3_bucket" "existing_bucket" {
 
 # Get the CloudFront distribution
 data "aws_cloudfront_distribution" "cdn" {
-  id = "E2C7O8WN0508EP"
+  id = "EBA0CLX0PRJP8"
 }
 
 # Create the bucket policy
@@ -92,6 +92,18 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
   restrict_public_buckets = false
 }
 
+########################
+# CloudFfront Function #
+########################
+
+resource "aws_cloudfront_function" "test" {
+    name    = "test"
+    runtime = "cloudfront-js-2.0"
+    comment = "my function"
+    publish = true
+    code    = file("${path.module}/function.js")
+  }
+
 ######################################
 ## Route 53 and Certificate Manager ##
 ######################################
@@ -103,6 +115,7 @@ resource "aws_route53_zone" "zone" {
 resource "aws_acm_certificate" "cert" {
   domain_name       = "colinh.cloudtalents.io"
   validation_method = "DNS"
+  provider          = aws.n-virginia
 
   tags = {
     Environment = "test"
@@ -112,3 +125,16 @@ resource "aws_acm_certificate" "cert" {
     create_before_destroy = true
   }
 }
+
+resource "aws_route53_record" cert_validation {
+  for_each = {
+    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => dvo
+  }
+
+  zone_id = aws_route53_zone.zone.zone_id
+  name    = each.value.resource_record_name
+  type    = each.value.resource_record_type
+  ttl     = 60
+  records = [each.value.resource_record_value]
+}
+
