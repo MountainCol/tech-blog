@@ -27,7 +27,7 @@ provider "aws" {
 variable "domain_name" {
   description = "Domain name for the blog"
   type        = string
-  default     = "colinh.cloudtalents.io"
+  default     = "h.cloudtalents.io"
 }
 
 ###############################
