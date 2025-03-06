@@ -35,14 +35,14 @@ jobs:
 
   deploy-hugo:
     runs-on: ubuntu-22.04
-    needs: build  # Changed from create-infra to build
+    needs: build  
     env:
       # Note: These environment variables need to be set correctly
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}  # Use a secret instead of output
       CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID }}  # Use a secret instead of output
     
     concurrency: 
-      group: ${{ github.workflow }}-${{ github.ref }}  # Fixed typo in github
+      group: ${{ github.workflow }}-${{ github.ref }}  
     
     steps:
       - uses: actions/checkout@v4
